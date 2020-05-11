@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+tox = "~=3.15"
+
+
+[packages]
+"elfose-jose-core" = {path = "core", editable = true}
+"elfose-jose-pycryptodome" = {path = "pycryptodome", editable = true}
+
+[requires]
+python_version = "3.6"
