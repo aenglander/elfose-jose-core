@@ -1,4 +1,8 @@
+import json
 from base64 import b64encode, b64decode
+from typing import Union, Dict
+
+JSONDict = Dict[str, Union[str, bool, float, int, "JSONDict"]]
 
 
 def base64_url_encode(unencoded: bytes) -> str:
@@ -28,3 +32,9 @@ def base64_url_decode(encoded_bytes: str) -> bytes:
     return base64_decoded
 
 
+def json_dumps(data: JSONDict) -> str:
+    return json.dumps(data, separators=(',', ':'))
+
+
+def json_loads(json_str: str) -> JSONDict:
+    return json.loads(json_str)

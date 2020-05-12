@@ -7,7 +7,8 @@ from typing import Collection, Dict, Union, List
 
 from .cryptography import CryptographyModule
 from .cryptography import HashingAlgorithm
-from .encoding import base64_url_encode, base64_url_decode
+from .encoding import base64_url_encode, base64_url_decode, json_dumps, \
+    json_loads
 from .jwa import DigitalSignatureAlgorithm
 from .jwk import Key, KeySet, get_signing_keys, get_verifying_keys
 
@@ -60,8 +61,8 @@ class JWS:
             if serialization is Serialization.COMPACT:
                 current_protected_header.update(current_unprotected_header)
 
-            protected_header_bytes = json.dumps(current_protected_header,
-                                                separators=(',', ':')).encode()
+            protected_header_bytes = json_dumps(
+                current_protected_header).encode()
             protected_header_encoded = base64_url_encode(
                 protected_header_bytes)
             signing_input = protected_header_encoded + "." + payload_encoded
@@ -123,7 +124,7 @@ class JWS:
             })
         else:
             try:
-                jws_obj = json.loads(jws)
+                jws_obj = json_loads(jws)
                 if "signatures" in jws_obj:
                     jws_dict = jws_obj
                 else:  # JKS Flattened JSON
@@ -143,7 +144,7 @@ class JWS:
             encoded_protected = signature_entry["protected"]
             sign_string = encoded_protected + "." + payload
             json_protected = base64_url_decode(encoded_protected)
-            protected = json.loads(json_protected)
+            protected = json_loads(json_protected)
             if "alg" not in protected:
                 raise ValueError("Invalid JWS: Header has no alg entry!")
             alg = protected["alg"]
